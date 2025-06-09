@@ -10,8 +10,8 @@ namespace UnlimitedWorkshops
         public override string DisplayName => "Unlimited Workshops";
         public override string FolderName => "UnlimitedWorkshops";
 
-        [SettingPropertyInteger("Workshops por Nível de Clã", 1, 20, HintText = "Define quantos workshops são permitidos por nível do clã.", RequireRestart = false, Order = 0)]
-        [SettingPropertyGroup("Configurações")]
-        public int WorkshopsPerClanLevel { get; set; } = 5;
+        [SettingPropertyInteger("Workshops per Clan Level", 1, 30, HintText = "Set how many workshops slots available per Clan level.", RequireRestart = false, Order = 0)]
+        [SettingPropertyGroup("Main")]
+        public int WorkshopsPerClanLevel { get; set; } = 1;
     }
 }
