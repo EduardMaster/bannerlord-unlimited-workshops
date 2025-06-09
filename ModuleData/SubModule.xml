@@ -1,0 +1,19 @@
+<Module>
+  <Name value="UnlimitedWorkshops"/>
+  <Id value="UnlimitedWorkshops"/>
+  <Version value="1.0.0"/>
+  <SingleplayerModule value="true"/>
+  <SubModules>
+    <SubModule>
+      <Name value="UnlimitedWorkshops"/>
+      <DLLName value="UnlimitedWorkshops.dll"/>
+      <SubModuleClassType value="UnlimitedWorkshops.SubModule"/>
+    </SubModule>
+  </SubModules>
+  <DependedModules>
+    <DependedModule Id="Bannerlord.Harmony"/>
+    <DependedModule Id="Bannerlord.ButterLib"/>
+    <DependedModule Id="Bannerlord.MBOptionScreen"/> <!-- MCM -->
+    <DependedModule Id="Bannerlord.UIExtenderEx"/>
+  </DependedModules>
+</Module>

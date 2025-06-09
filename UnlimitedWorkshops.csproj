@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>UnlimitedWorkshops</AssemblyName>
+    <OutputPath>bin/Win64_Shipping_Client/</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Referências aos assemblies do Bannerlord -->
+    <Reference Include="TaleWorlds.CampaignSystem">
+      <HintPath>$(BannerlordPath)\TaleWorlds.CampaignSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.MountAndBlade">
+      <HintPath>$(BannerlordPath)\TaleWorlds.MountAndBlade.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.Core">
+      <HintPath>$(BannerlordPath)\TaleWorlds.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Dependências NuGet do MCM, Harmony, etc -->
+    
+    <PackageReference Include="Bannerlord.ButterLib" Version="2.9.18" />
+    <PackageReference Include="Bannerlord.UIExtenderEx" Version="2.12.0" />
+    <PackageReference Include="Bannerlord.ReferenceAssemblies.Core" Version="1.2.12.54620" />
+    <PackageReference Include="Bannerlord.MCM" Version="5.10.2" />
+
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- Caminho base para os arquivos do jogo -->
+    <BannerlordPath Condition=" '$(BannerlordPath)' == '' ">
+      D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client
+    </BannerlordPath>
+  </PropertyGroup>
+
+</Project>
