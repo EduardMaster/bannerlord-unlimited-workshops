@@ -3,6 +3,8 @@
     <PropertyGroup>
         <TargetFramework>net472</TargetFramework>
         <LangVersion>latest</LangVersion>
+		<PlatformTarget>x64</PlatformTarget>
+		<Prefer32Bit>false</Prefer32Bit>
         <AssemblyName>UnlimitedWorkshops</AssemblyName>
         <OutputPath>bin/Win64_Shipping_Client/</OutputPath>
     </PropertyGroup>
@@ -10,21 +12,27 @@
 	    <BannerlordPath Condition=" '$(BannerlordPath)' == '' ">D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client</BannerlordPath>
     </PropertyGroup>
   <ItemGroup>
-   
     <Reference Include="TaleWorlds.CampaignSystem">
       <HintPath>$(BannerlordPath)\TaleWorlds.CampaignSystem.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="TaleWorlds.MountAndBlade">
       <HintPath>$(BannerlordPath)\TaleWorlds.MountAndBlade.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="TaleWorlds.Core">
       <HintPath>$(BannerlordPath)\TaleWorlds.Core.dll</HintPath>
+	  <Private>false</Private>
     </Reference>
+	<Reference Include="TaleWorlds.Library">
+		<HintPath>$(BannerlordPath)\TaleWorlds.Library.dll</HintPath>
+		<Private>false</Private>
+	</Reference>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bannerlord.ButterLib" Version="2.9.18" />
-    <PackageReference Include="Bannerlord.UIExtenderEx" Version="2.12.0" />
+    <PackageReference Include="Bannerlord.ButterLib" Version="2.9.18" IncludeAssets="compile" />
+    <PackageReference Include="Bannerlord.UIExtenderEx" Version="2.12.0" IncludeAssets="compile" />
     <PackageReference Include="Bannerlord.MCM" Version="5.10.2" IncludeAssets="compile" />
   </ItemGroup>
 

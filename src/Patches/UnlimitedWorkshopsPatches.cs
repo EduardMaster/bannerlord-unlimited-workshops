@@ -3,6 +3,7 @@ using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using UnlimitedWorkshops;
 
 namespace UnlimitedWorkshops.Patches
@@ -21,4 +22,17 @@ namespace UnlimitedWorkshops.Patches
             return false; // impede o método original
         }
     }
+
+    [HarmonyPatch(typeof(DefaultWorkshopModel), "WarehouseCapacity", MethodType.Getter)]
+    public static class WorkshopWerehouseCapacityPatch
+    {
+        static bool Prefix(ref int __result)
+        {
+            int workshopsWerehouseCapacity = Settings.Instance?.WorkshopWerehouseCapacity ?? 6000;
+            __result = workshopsWerehouseCapacity;
+            
+            return false;
+        }
+    }
+   
 }
