@@ -35,4 +35,26 @@ namespace UnlimitedWorkshops.Patches
         }
     }
    
+    [HarmonyPatch(typeof(DefaultWorkshopModel), "DefaultWorkshopCountInSettlement", MethodType.Getter)]
+    public static class DefaultWorkshopCountInSettlementPatch
+    {
+        static bool Prefix(ref int __result)
+        {
+            int workshopsPerCity = Settings.Instance?.WorkshopsPerCity ?? 4;
+            __result = workshopsPerCity;
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(DefaultWorkshopModel), "DailyExpense", MethodType.Getter)]
+    public static class DailyExpensePatch
+    {
+        static bool Prefix(ref int __result)
+        {
+            int dailyWorkersPayment = Settings.Instance?.DailyWorkersPayment ?? 100;
+            __result = dailyWorkersPayment;
+            return false;
+        }
+    }
+   
 }

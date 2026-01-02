@@ -17,6 +17,14 @@ namespace UnlimitedWorkshops
         [SettingPropertyGroup("Main")]
         public int WorkshopsPerClanLevel { get; set; } = 5;
 
+        [SettingPropertyInteger("Workshops per City", 4, 11, HintText = "Set how many workshops are available per city/settlement.", RequireRestart = false, Order = 1)]
+        [SettingPropertyGroup("Main")]
+        public int WorkshopsPerCity { get; set; } = 4;
+
+        [SettingPropertyInteger("Daily Workers Payment", 20, 1000, HintText = "Set how much is paid daily to workshop workers.", RequireRestart = false, Order = 2)]
+        [SettingPropertyGroup("Main")]
+        public int DailyWorkersPayment { get; set; } = 100;
+
         [SettingPropertyInteger("Workshop Werehouse Capacity", 6000, 100000, HintText = "Set how many items can stock on wherehouse.", RequireRestart = false, Order = 0)]
         [SettingPropertyGroup("Main")]
         public int WorkshopWerehouseCapacity { get; set; } = 6000;
