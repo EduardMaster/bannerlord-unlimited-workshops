@@ -17,7 +17,7 @@ namespace UnlimitedWorkshops
         [SettingPropertyGroup("Main")]
         public int WorkshopsPerClanLevel { get; set; } = 5;
 
-        [SettingPropertyInteger("Workshops per City", 4, 11, HintText = "Set how many workshops are available per city/settlement.", RequireRestart = false, Order = 1)]
+        [SettingPropertyInteger("Workshops per Town", 4, 11, HintText = "Set how many workshops are available per city/settlement.", RequireRestart = false, Order = 1)]
         [SettingPropertyGroup("Main")]
         public int WorkshopsPerCity { get; set; } = 4;
 
