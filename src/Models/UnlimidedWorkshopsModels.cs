@@ -3,6 +3,8 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.MapEvents;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -11,7 +13,11 @@ namespace UnlimitedWorkshops.Models
 
     public class DropAllDeadsEquipmentModel : DefaultBattleRewardModel
     {
-       
+        void teste()
+        {
+            MapEvent mapEven = null;
+        }
+
     }
 
     public class EquipmentPartyWageModel : DefaultPartyWageModel
