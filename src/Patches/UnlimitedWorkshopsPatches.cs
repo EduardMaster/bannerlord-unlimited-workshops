@@ -66,16 +66,13 @@ namespace UnlimitedWorkshops.Patches
     [HarmonyPatch(typeof(MapEvent), "LootCasualtyCharacter")]
     public class LootCasualtyCharacterPatch
     {
-        // Usamos Prefix para interceptar a execução antes do método original rodar
-        // Se retornarmos 'false', o método original é ignorado e nós controlamos 100% da lógica.
         public static bool Prefix(
             CharacterObject casualtyCharacter, 
             MapEventParty winnerParty, 
             MapEventParty defeatedParty, 
             float aiTradePenalty, 
             int maxLootedItemsPerBodyForMainParty, 
-            ItemRoster mainPartyLootFromCasualties)
-        {
+            ItemRoster mainPartyLootFromCasualties){
             Hero leaderHero = winnerParty.Party.LeaderHero;
             if (leaderHero == null)
             {
@@ -96,22 +93,16 @@ namespace UnlimitedWorkshops.Patches
                     }
                 }
             }
-            else
-            {
-                // ==========================================
-                // AQUI É O LOOT DO JOGADOR (100% DOS ITENS)
-                // ==========================================
-                if (maxLootedItemsPerBodyForMainParty <= 0)
-                {
-                    return false;
-                }
-
-                // Pega os equipamentos de batalha do soldado morto
+            else{
+                /*
+                if (maxLootedItemsPerBodyForMainParty <= 0){ return false;}
+                */
                 Equipment equipment = casualtyCharacter.BattleEquipments?.GetRandomElementInefficiently();
                 if (equipment != null)
                 {
+                    int maxSlots = Equipment.EquipmentSlotLength; // 12
                     // Varre todos os 12 slots de equipamento da tropa (armas, armaduras, montaria, etc.)
-                    for (int slot = 0; slot < 12; slot++)
+                    for (int slot = 0; slot < maxSlots; slot++)
                     {
                         EquipmentElement eqElement = equipment[slot];
                         
