@@ -7,6 +7,7 @@ using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -18,40 +19,40 @@ namespace UnlimitedWorkshops.Models
     {
         void teste()
         {
-            MapEvent mapEven = null;
+            MapEvent mapEvent = null;
+            Town town = null;
+            
         }
+          
+        public override int CalculatePlunderedGoldAmountFromDefeatedParty(PartyBase defeatedParty)
+        {
+            int result = base.CalculatePlunderedGoldAmountFromDefeatedParty(defeatedParty);
+            //defeatedParty.
+            if (defeatedParty.MapEvent!= null)
+            {
+                //defeatedParty.MapEvent.
+            }
+            return result;
+        }
+
     }
 
     public class ManipulateItemsPricesModel : DefaultTradeItemPriceFactorModel
     {
         public override float GetBasePriceFactor(ItemCategory itemCategory, float inStoreValue, float supply, float demand, bool isSelling, int transferValue)
         {
-            float currentUnits = inStoreValue;
             if (isSelling)
             {
-                currentUnits += (float)transferValue;
+                inStoreValue += transferValue;
             }
-            if (currentUnits <= 0f)
+
+            float value = MathF.Pow(demand / (0.2f * supply + inStoreValue * 0.1f + 2f), itemCategory.IsAnimal ? 0.3f : 0.6f);
+            if (itemCategory.IsTradeGood)
             {
-                return 10f;
+                return MathF.Clamp(value, 0.1f, 10f);
             }
-            float factor;
-            float maxScarcityThreshold = 1000f;
-            float oversupplyThreshold = 1500f;
-            if (currentUnits <= maxScarcityThreshold)
-            {
-                factor = 1f + 9f * (1f - (currentUnits / maxScarcityThreshold));
-            }
-            else if (currentUnits <= oversupplyThreshold)
-            {
-                factor = 1f;
-            }
-            else
-            {
-                float excessUnits = currentUnits - oversupplyThreshold;
-                factor = 1f - ((excessUnits / 500f) * 0.1f);
-            }
-            return MathF.Clamp(factor, 0.1f, 10f);
+
+            return MathF.Clamp(value, 0.5f, 3f);
         }
         public override float GetTradePenalty(ItemObject item, MobileParty clientParty, PartyBase merchant, bool isSelling, float inStore, float supply, float demand)
         {
@@ -69,15 +70,12 @@ namespace UnlimitedWorkshops.Models
             {
                 priceFactor = basePriceFactor * 1f / (1f + tradePenalty);
             }
-
-           
             float finalPrice = item.ItemValue * priceFactor;
             int finalPriceFix = isSelling ? MathF.Floor(finalPrice) : MathF.Ceiling(finalPrice);
             if (!isSelling && merchant?.MobileParty != null && merchant.MobileParty.IsCaravan && clientParty.HasPerk(DefaultPerks.Trade.SilverTongue, checkSecondaryRole: true))
             {
                 finalPriceFix = MathF.Ceiling((float)finalPriceFix * (1f - DefaultPerks.Trade.SilverTongue.SecondaryBonus));
             }
-            
             return MathF.Max(finalPriceFix, 1);
         }
     }
