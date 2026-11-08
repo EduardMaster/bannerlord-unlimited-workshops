@@ -45,18 +45,19 @@ namespace UnlimitedWorkshops.Models
             {
                 inStoreValue += transferValue;
             }
-
-            float value = MathF.Pow(demand / (0.2f * supply + inStoreValue * 0.1f + 2f), itemCategory.IsAnimal ? 0.3f : 0.6f);
+            float fluctuation = demand / (0.1f * supply + inStoreValue * 0.05f + 2f);
+            float fluctuationSmothless = MathF.Pow(fluctuation, itemCategory.IsAnimal ? 0.3f : 0.6f);
             if (itemCategory.IsTradeGood)
             {
-                return MathF.Clamp(value, 0.1f, 10f);
+                return MathF.Clamp(fluctuation, 0.1f, 10f);
             }
 
-            return MathF.Clamp(value, 0.5f, 3f);
+            return MathF.Clamp(fluctuation, 0.5f, 3f);
         }
         public override float GetTradePenalty(ItemObject item, MobileParty clientParty, PartyBase merchant, bool isSelling, float inStore, float supply, float demand)
         {
-            return 0f;
+            float vanillaPenalty = base.GetTradePenalty(item, clientParty, merchant, isSelling, inStore, supply, demand);
+            return MathF.Clamp(vanillaPenalty, 0, 0.5f);
         }
          public override int GetPrice(EquipmentElement item, MobileParty clientParty, PartyBase merchant, bool isSelling, float inStoreValue, float supply, float demand)
         {
@@ -87,8 +88,8 @@ namespace UnlimitedWorkshops.Models
         public override ExplainedNumber GetGoldCostForUpgrade(PartyBase party, CharacterObject characterObject, CharacterObject upgradeTarget)
         {
             PartyWageModel partyWageModel = Campaign.Current.Models.PartyWageModel;
-            int roundedResultNumber = partyWageModel.GetTroopRecruitmentCost(upgradeTarget, null, withoutItemCost: true).RoundedResultNumber;
-            int roundedResultNumber2 = partyWageModel.GetTroopRecruitmentCost(characterObject, null, withoutItemCost: true).RoundedResultNumber;
+            int roundedResultNumber = partyWageModel.GetTroopRecruitmentCost(upgradeTarget, party.LeaderHero, withoutItemCost: true).RoundedResultNumber;
+            int roundedResultNumber2 = partyWageModel.GetTroopRecruitmentCost(characterObject, party.LeaderHero, withoutItemCost: true).RoundedResultNumber;
             bool flag = characterObject.Occupation == Occupation.Mercenary || characterObject.Occupation == Occupation.Gangster;
             float upgradeCost = (float)(roundedResultNumber - roundedResultNumber2); // ((!flag) ? 2f : 3f);
             ExplainedNumber stat = new ExplainedNumber(upgradeCost);
@@ -116,7 +117,7 @@ namespace UnlimitedWorkshops.Models
     {
         public override int GetCharacterWage(CharacterObject character)
         {
-            int num = character.Tier switch
+            int wage = character.Tier switch
             {
                 0 => 1,
                 1 => 2,
@@ -129,25 +130,36 @@ namespace UnlimitedWorkshops.Models
             };
             if (character.Occupation == Occupation.Mercenary)
             {
-                num = (int)((float)num * 1.5f);
+                wage = (int)((float)wage * 1.5f);
             }
 
-            return num;
+            return wage;
         }
 
         public override ExplainedNumber GetTroopRecruitmentCost(CharacterObject troop, Hero buyerHero, bool withoutItemCost = false)
         {
             ExplainedNumber vanillaCost = base.GetTroopRecruitmentCost(troop, buyerHero, withoutItemCost);
-            ExplainedNumber normalPricing = new ExplainedNumber(20f * troop.Level);
+            ExplainedNumber normalPricing = new ExplainedNumber(10f * troop.Tier);
             if (troop.Equipment != null)
             {
+                Settlement currentSettlement = buyerHero?.CurrentSettlement ?? buyerHero?.PartyBelongedTo?.CurrentSettlement;
                 float totalEquipmentValue = 0f;
                 for (int i = 0; i < (int)Equipment.EquipmentSlotLength; i++)
                 {
-                    EquipmentElement equipmentElement = troop.Equipment[i];
-                    if (equipmentElement.Item != null)
+                    EquipmentElement troopEquip = troop.Equipment[i];
+                    if (troopEquip.Item != null)
                     {
-                        totalEquipmentValue += equipmentElement.Item.Value;
+                        int itemPrice = troopEquip.Item.Value;
+                        if (currentSettlement?.IsTown == true )
+                        {
+                            itemPrice = currentSettlement.Town.GetItemPrice(troopEquip.Item, buyerHero.PartyBelongedTo);
+                        }
+                        else if (currentSettlement?.IsVillage == true)
+                        {
+                            itemPrice = currentSettlement.Village.GetItemPrice(troopEquip.Item, buyerHero.PartyBelongedTo);
+                        }
+                        //itemPrice = Campaign.Current.Models.TradeItemPriceFactorModel.GetPrice(equipmentElement,buyerHero.PartyBelongedTo);
+                        totalEquipmentValue += itemPrice;
                     }
                 }
                 if (totalEquipmentValue > 0f)
