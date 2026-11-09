@@ -4,7 +4,6 @@ using System.Reflection;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.CampaignSystem;
-using UnlimitedWorkshops.Models;
 
 namespace UnlimitedWorkshops
 {
@@ -24,10 +23,7 @@ namespace UnlimitedWorkshops
 
             if (gameStarterObject is CampaignGameStarter campaignStarter)
             {
-               campaignStarter.AddModel(new EquipmentPartyWageModel());
-               campaignStarter.AddModel(new EquipmentTroopUpgradeModel());
-               campaignStarter.AddModel(new DropAllDeadsEquipmentModel());
-               campaignStarter.AddModel(new ManipulateItemsPricesModel());
+              
             }
         }
     }
